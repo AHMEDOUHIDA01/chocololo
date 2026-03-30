@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List Application</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #todo-container { margin-top: 20px; }
+        .todo { display: flex; justify-content: space-between; margin-bottom: 5px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <h1>To-Do List Application</h1>
+    <div>
+        <input type="text" id="todo-input" placeholder="Add a new task...">
+        <button id="add-todo">Add</button>
+    </div>
+    <div>
+        <button id="filter-all">All</button>
+        <button id="filter-completed">Completed</button>
+        <button id="filter-pending">Pending</button>
+    </div>
+    <div id="stats">
+        <span id="total-todos">Total: 0</span>
+        <span id="completed-todos">Completed: 0</span>
+    </div>
+    <div id="todo-container"></div>
+    <script>
+        let todos = [];
+        const todoInput = document.getElementById('todo-input');
+        const todoContainer = document.getElementById('todo-container');
+        const totalTodos = document.getElementById('total-todos');
+        const completedTodos = document.getElementById('completed-todos');
+
+        document.getElementById('add-todo').addEventListener('click', function() {
+            const task = todoInput.value;
+            if (task) {
+                todos.push({ task, completed: false });
+                todoInput.value = '';
+                renderTodos();
+                updateStats();
+            }
+        });
+
+        function renderTodos(filter = 'all') {
+            todoContainer.innerHTML = '';
+            todos.forEach((todo, index) => {
+                if (filter === 'all' || (filter === 'completed' && todo.completed) || (filter === 'pending' && !todo.completed)) {
+                    const todoDiv = document.createElement('div');
+                    todoDiv.classList.add('todo');
+                    todoDiv.innerHTML = `<span>${todo.task}</span> <button onclick="toggleComplete(${index})">${todo.completed ? 'Undo' : 'Complete'}</button> <button onclick="deleteTodo(${index})">Delete</button>`;
+                    todoContainer.appendChild(todoDiv);
+                }
+            });
+        }
+
+        window.toggleComplete = function(index) {
+            todos[index].completed = !todos[index].completed;
+            renderTodos();
+            updateStats();
+        };
+
+        window.deleteTodo = function(index) {
+            todos.splice(index, 1);
+            renderTodos();
+            updateStats();
+        };
+
+        function updateStats() {
+            totalTodos.textContent = `Total: ${todos.length}`;
+            completedTodos.textContent = `Completed: ${todos.filter(todo => todo.completed).length}`;
+        }
+
+        document.getElementById('filter-all').addEventListener('click', () => renderTodos('all'));
+        document.getElementById('filter-completed').addEventListener('click', () => renderTodos('completed'));
+        document.getElementById('filter-pending').addEventListener('click', () => renderTodos('pending'));
+    </script>
+</body>
+</html>
