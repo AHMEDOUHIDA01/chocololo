@@ -1,0 +1,43 @@
+.landing-page {
+    background-color: #000000; /* Black background */
+    color: #FFFFFF; /* White text */
+    font-family: 'Arial', sans-serif;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5em;
+    color: #FFD700; /* Gold color */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+p {
+    font-size: 1.2em;
+    color: #B0E0E6; /* Light blue color */
+}
+
+.button {
+    background-color: #1E90FF; /* Dodger blue color */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 16px;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #4682B4; /* Steel blue on hover */
+}
+
+.footer {
+    margin-top: 20px;
+    font-size: 0.8em;
+    color: #B0C4DE; /* Light steel blue color */
+}
