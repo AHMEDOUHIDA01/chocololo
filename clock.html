@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Clock</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #282c34;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+        }
+        .clock {
+            background: radial-gradient(circle, #ffcc00, #ff6600);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        select {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        h1 {
+            font-size: 3em;
+            margin: 0;
+        }
+        .timezone {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="clock">
+        <h1 id="time">Loading...</h1>
+        <select id="timezone" class="timezone">
+            <option value="UTC">UTC</option>
+            <option value="America/New_York">New York</option>
+            <option value="Europe/London">London</option>
+            <option value="Asia/Tokyo">Tokyo</option>
+            <option value="Australia/Sydney">Sydney</option>
+        </select>
+    </div>
+    <script>
+        function updateClock() {
+            const timezone = document.getElementById('timezone').value;
+            const options = { timeZone: timezone, hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            const formatter = new Intl.DateTimeFormat([], options);
+            const [hour, minute, second] = formatter.format(new Date()).split(':');
+            document.getElementById('time').textContent = `${hour}:${minute}:${second}`;
+        }
+        document.getElementById('timezone').addEventListener('change', updateClock);
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
