@@ -6,6 +6,9 @@ on:
     - cron: "20 9 * * 1"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   send-weekly-report:
     runs-on: ubuntu-latest
@@ -28,4 +31,4 @@ jobs:
           REPORT_EMAIL_FROM: ${{ secrets.REPORT_EMAIL_FROM }}
           REPORT_SUBJECT: ${{ vars.REPORT_SUBJECT }}
           REPORT_BODY: ${{ vars.REPORT_BODY }}
-        run: python /home/runner/work/chocololo/chocololo/scripts/send_weekly_report.py
+        run: python scripts/send_weekly_report.py

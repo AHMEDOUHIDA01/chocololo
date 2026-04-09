@@ -12,7 +12,11 @@ def required_env(name: str) -> str:
 
 def main() -> None:
     smtp_host = required_env("SMTP_HOST")
-    smtp_port = int(required_env("SMTP_PORT"))
+    smtp_port_raw = required_env("SMTP_PORT")
+    try:
+        smtp_port = int(smtp_port_raw)
+    except ValueError as error:
+        raise ValueError("SMTP_PORT must be a valid integer.") from error
     smtp_username = required_env("SMTP_USERNAME")
     smtp_password = required_env("SMTP_PASSWORD")
     recipient = required_env("REPORT_EMAIL_TO")

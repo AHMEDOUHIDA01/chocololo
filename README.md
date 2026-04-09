@@ -6,7 +6,7 @@ Le dépôt inclut un workflow GitHub Actions qui envoie le **premier rapport de 
 
 ### Fichier workflow
 
-- `/home/runner/work/chocololo/chocololo/.github/workflows/weekly-report-email.yml`
+- `.github/workflows/weekly-report-email.yml`
 
 ### Secrets GitHub requis
 
