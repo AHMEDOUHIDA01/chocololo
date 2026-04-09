@@ -38,10 +38,12 @@ def main() -> None:
     with smtplib.SMTP(smtp_host, smtp_port, timeout=30) as smtp:
         try:
             smtp.starttls(context=ssl.create_default_context())
+            smtp.login(smtp_username, smtp_password)
+            smtp.send_message(message)
+        except smtplib.SMTPAuthenticationError as error:
+            raise RuntimeError("SMTP authentication failed. Check SMTP_USERNAME/SMTP_PASSWORD.") from error
         except smtplib.SMTPException as error:
-            raise RuntimeError("Failed to secure SMTP connection with STARTTLS.") from error
-        smtp.login(smtp_username, smtp_password)
-        smtp.send_message(message)
+            raise RuntimeError("Failed to send email through SMTP.") from error
 
     print("Weekly report email sent successfully.")
 
