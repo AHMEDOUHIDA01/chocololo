@@ -51,7 +51,11 @@ def main() -> None:
     with smtp_connection as smtp:
         try:
             if smtp_port != 465:
+                smtp.ehlo()
+                if not smtp.has_extn("starttls"):
+                    raise RuntimeError("SMTP server does not support STARTTLS on this port.")
                 smtp.starttls(context=ssl.create_default_context())
+                smtp.ehlo()
             smtp.login(smtp_username, smtp_password)
             smtp.send_message(message)
         except smtplib.SMTPAuthenticationError as error:
