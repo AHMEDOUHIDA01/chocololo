@@ -1,6 +1,10 @@
 import os
 import smtplib
+import ssl
 from email.message import EmailMessage
+
+DEFAULT_SUBJECT = "Premier rapport de la semaine - Chocololo"
+DEFAULT_BODY = "Bonjour,\n\nVoici le premier rapport de cette semaine.\n\nCordialement,\nChocololo"
 
 
 def required_env(name: str) -> str:
@@ -22,11 +26,8 @@ def main() -> None:
     recipient = required_env("REPORT_EMAIL_TO")
     sender = os.getenv("REPORT_EMAIL_FROM", "").strip() or smtp_username
 
-    subject = os.getenv("REPORT_SUBJECT", "").strip() or "Premier rapport de la semaine - Chocololo"
-    body = (
-        os.getenv("REPORT_BODY", "").strip()
-        or "Bonjour,\n\nVoici le premier rapport de cette semaine.\n\nCordialement,\nChocololo"
-    )
+    subject = os.getenv("REPORT_SUBJECT", "").strip() or DEFAULT_SUBJECT
+    body = os.getenv("REPORT_BODY", "").strip() or DEFAULT_BODY
 
     message = EmailMessage()
     message["Subject"] = subject
@@ -35,7 +36,10 @@ def main() -> None:
     message.set_content(body)
 
     with smtplib.SMTP(smtp_host, smtp_port, timeout=30) as smtp:
-        smtp.starttls()
+        try:
+            smtp.starttls(context=ssl.create_default_context())
+        except smtplib.SMTPException as error:
+            raise RuntimeError("Failed to secure SMTP connection with STARTTLS.") from error
         smtp.login(smtp_username, smtp_password)
         smtp.send_message(message)
 
