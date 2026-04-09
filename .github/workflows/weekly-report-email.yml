@@ -1,0 +1,31 @@
+name: Weekly report email
+
+on:
+  schedule:
+    # Tous les lundis à 09:20 UTC
+    - cron: "20 9 * * 1"
+  workflow_dispatch:
+
+jobs:
+  send-weekly-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Send weekly report email
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          REPORT_EMAIL_TO: ${{ secrets.REPORT_EMAIL_TO }}
+          REPORT_EMAIL_FROM: ${{ secrets.REPORT_EMAIL_FROM }}
+          REPORT_SUBJECT: ${{ vars.REPORT_SUBJECT }}
+          REPORT_BODY: ${{ vars.REPORT_BODY }}
+        run: python /home/runner/work/chocololo/chocololo/scripts/send_weekly_report.py
