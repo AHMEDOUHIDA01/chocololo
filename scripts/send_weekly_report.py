@@ -43,19 +43,15 @@ def main() -> None:
                 timeout=30,
                 context=ssl.create_default_context(),
             )
-            tls_secured = True
         else:
             smtp_connection = smtplib.SMTP(smtp_host, smtp_port, timeout=30)
-            tls_secured = False
     except OSError as error:
         raise RuntimeError("Could not connect to SMTP server.") from error
 
     with smtp_connection as smtp:
         try:
-            if not tls_secured:
-                response_code, _ = smtp.starttls(context=ssl.create_default_context())
-                if response_code != 220:
-                    raise RuntimeError("STARTTLS was not accepted by the SMTP server.")
+            if smtp_port != 465:
+                smtp.starttls(context=ssl.create_default_context())
             smtp.login(smtp_username, smtp_password)
             smtp.send_message(message)
         except smtplib.SMTPAuthenticationError as error:
